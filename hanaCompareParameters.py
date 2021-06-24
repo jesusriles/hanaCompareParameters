@@ -1,3 +1,11 @@
+'''
+    This functions returns a list with the follow structure:
+        list =
+        [
+            [section name],
+            [ {param_name:value}, {param_name:value}, ... ]
+        ]
+'''
 def getParametersFromFile(fileName):
     file1 = open(fileName, "r")
 
@@ -40,16 +48,33 @@ def getParametersFromFile(fileName):
 
     return parametersBySection
 
+
 def compareParameters(list1, list2):
-    pass
+    for section in list1:
+        for i, x in enumerate(section):
+            if i == 0: # section name
+                # check if this section exist on list2
+
+                print(x)
+            if i == 1: # list with the {parameters:values}
+                for parameter in x:
+                    print("{0} = {1}".format(parameter, x[parameter]))
+
 
 def printParametersBySection(list):
-    for section in list:
-        print(section)
+    for section in list1:
+        for i, x in enumerate(section):
+            if i == 0: # section name
+                print(x)
+            if i == 1: # list with the {parameters:values}
+                for parameter in x:
+                    print("{0} = {1}".format(parameter, x[parameter]))
 
 
 list1 = getParametersFromFile("C:\\Users\\jesushgonzalez\\Desktop\\Diff\\FPR (QA) global.ini")
 list2 = getParametersFromFile("C:\\Users\\jesushgonzalez\\Desktop\\Diff\\FPR global.ini")
 
-printParametersBySection(list1)
-printParametersBySection(list2)
+#printParametersBySection(list1)
+#printParametersBySection(list2)
+
+compareParameters(list1, list2)
