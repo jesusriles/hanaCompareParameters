@@ -1,42 +1,55 @@
-file1 = open("C:\\Users\\jesushgonzalez\\Desktop\\Diff\\FPR (QA) global.ini", "r")
+def getParametersFromFile(fileName):
+    file1 = open(fileName, "r")
 
-linesF1 = file1.readlines()
+    linesF1 = file1.readlines()
 
-parameterValues = {}
-parameterSection = []
-tmpList = []
+    parametersBySection = []
+    tmpList = []
+    parameterValues = {}
 
-for line in linesF1:
-    # remove lines that are not parameters
-    if line[0] == "#":
-        continue
+    for line in linesF1:
+        if line[0] == "#":
+            continue
 
-    #TODO: separate parameters by section
-    if line[0] == "[":
-        if tmpList:
-            parameterSection.append(tmpList)
+        if line[0] == "[":
+            if tmpList:
+                tmpList.append(parameterValues)
+                parametersBySection.append(tmpList)
+            else:
+                pass
+                #print("Empty list!!!")
+
+            tmpList = []
+            parameterValues = {}
+
+            tmpList.append(line) # add the new section to the new list
+
+        if "=" not in line:
+            continue
+
+        partitionLine = line.partition("=")
+        keyTmp = partitionLine[0].replace(" ", "")
+        valueTmp = partitionLine[2].replace(" ", "")
+
+        # create dictionaries as {key:value} / {parameter:value}
+        if keyTmp not in parameterValues:
+            parameterValues[keyTmp] = valueTmp
         else:
-            print("Empty list!!!")
+            pass
+            #print("Duplicate parameter {0}".format(keyTmp))
 
-        tmpList = []
-        tmpList.append(line)
+    return parametersBySection
 
-    if "=" not in line:
-        continue
+def compareParameters(list1, list2):
+    pass
 
-    # separate the parameter name and the value based on the "=" sign
-    partitionLine = line.partition("=")
+def printParametersBySection(list):
+    for section in list:
+        print(section)
 
-    # remove spaces to the key and values
-    keyTmp = partitionLine[0].replace(" ", "")
-    valueTmp = partitionLine[2].replace(" ", "")
 
-    # create dictionaries as {key:value} / {parameter:value}
-    if keyTmp not in parameterValues:
-        parameterValues[keyTmp] = valueTmp
-        tmpList.append(parameterValues)
-    else:
-        print("Duplicate parameter {0}".format(keyTmp))
+list1 = getParametersFromFile("C:\\Users\\jesushgonzalez\\Desktop\\Diff\\FPR (QA) global.ini")
+list2 = getParametersFromFile("C:\\Users\\jesushgonzalez\\Desktop\\Diff\\FPR global.ini")
 
-for dict1 in parameterSection:
-    print(dict1)
+printParametersBySection(list1)
+printParametersBySection(list2)
